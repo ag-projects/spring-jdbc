@@ -37,24 +37,38 @@ public class RideRepositoryImpl implements RideRepository {
 	public Ride createRide(Ride ride) {
 //		this.jdbcTemplate.update("insert into ride (name, duration) values (?,?)",
 //				ride.getName(), ride.getDuration());
-		
-		
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		this.jdbcTemplate.update(new PreparedStatementCreator() {
 			
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("insert into ride (name, duration) values (?,?)", new String [] {"id"});
-				preparedStatement.setString(1, ride.getName());
-				preparedStatement.setInt(2, ride.getDuration());
-				
-				return preparedStatement;
-			}
-		}, keyHolder);
+//		KeyHolder keyHolder = new GeneratedKeyHolder();
+//		this.jdbcTemplate.update(new PreparedStatementCreator() {
+//			
+//			@Override
+//			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+//				
+//				PreparedStatement preparedStatement = connection
+//						.prepareStatement("insert into ride (name, duration) values (?,?)", new String [] {"id"});
+//				preparedStatement.setString(1, ride.getName());
+//				preparedStatement.setInt(2, ride.getDuration());
+//				
+//				return preparedStatement;
+//			}
+//		}, keyHolder);
+//		
+//		Number key = keyHolder.getKey();
 		
-		Number key = keyHolder.getKey();
+		SimpleJdbcInsert insert = new SimpleJdbcInsert(this.jdbcTemplate);
+		insert.setGeneratedKeyName("id");
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("name", ride.getName());
+		data.put("duration", ride.getDuration());
+		
+		List<String> columns = new ArrayList<>();
+		columns.add("name");
+		columns.add("duration");
+		
+		insert.setTableName("ride");
+		insert.setColumnNames(columns);
+		Number key = insert.executeAndReturnKey(data);
 		
 		return getRide(key.intValue());
 	}
