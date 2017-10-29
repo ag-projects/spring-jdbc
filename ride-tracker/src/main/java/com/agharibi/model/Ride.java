@@ -1,14 +1,15 @@
 package com.agharibi.model;
 
 public class Ride {
-
+	
+	private Integer id;
 	private String name;
 	private int duration;
 
 	public int getDuration() {
 		return duration;
 	}
-
+ 
 	public String getName() {
 		return name;
 	}
@@ -21,4 +22,11 @@ public class Ride {
 		this.name = name;
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

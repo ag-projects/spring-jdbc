@@ -17,10 +17,10 @@ public class RestControllerTest {
 	public void testCreateRide() throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
 		Ride ride  = new Ride();
-		ride.setName("Down Town LA Ride");
+		ride.setName("Down Town Seattle LA Ride");
 		ride.setDuration(42);
 		
-		restTemplate.put("http://localhost:8080/ride_tracker/ride", ride);
+		ride = restTemplate.postForObject("http://localhost:8080/ride_tracker/ride", ride, Ride.class);
 	}
 
 	@Test(timeout=3000)
