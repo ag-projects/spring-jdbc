@@ -1,9 +1,5 @@
 package com.agharibi.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -98,6 +94,11 @@ public class RideRepositoryImpl implements RideRepository {
 	
 	@Override
 	public void deleteRide(Integer id) {
-		this.jdbcTemplate.update("delete from ride where id = ?", id);
+		// this.jdbcTemplate.update("delete from ride where id = ?", id);
+		NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(this.jdbcTemplate);
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("id", id);
+		
+		template.update("delete from ride where id=:id", paramMap);
 	}
 }
